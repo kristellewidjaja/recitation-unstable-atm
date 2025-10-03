@@ -54,19 +54,6 @@ TEST_CASE("Deposit edge cases", "[ex-2]") {
                     std::invalid_argument);
 }
 
-// check if account exists when calling register account and if it does, make
-// sure to throw an invalid_argument exception
-TEST_CASE("Register account edge cases", "[ex-0]") {
-  Atm atm;
-  atm.RegisterAccount(12345678, 1234, "Sam Sepiol", 300.30);
-
-  atm.RegisterAccount(12345678, 1234, "John Doe", 300.30);
-  // check if account exists, then make sure to throw an invalid_argument
-  // exception
-  REQUIRE_THROWS_AS(atm.RegisterAccount(12345678, 1234, "John Doe", 300.30),
-                    std::invalid_argument);
-}
-
 TEST_CASE("Withdraw edge cases", "[ex-2]") {
   Atm atm;
   atm.RegisterAccount(12345678, 1234, "Sam Sepiol", 300.30);
@@ -81,6 +68,15 @@ TEST_CASE("Withdraw edge cases", "[ex-2]") {
 
   // throw an runtime_error exception if the amount is greater than the balance
   REQUIRE_THROWS_AS(atm.WithdrawCash(12345678, 1234, 1000), std::runtime_error);
+}
+
+TEST_CASE("RegisterAccount throws when account already exists", "[ex-1]") {
+  Atm atm;
+  atm.RegisterAccount(12345678, 1234, "Sam Sepiol", 300.30);
+
+  // Attempt to register again with the same card number and pin
+  REQUIRE_THROWS_AS(atm.RegisterAccount(12345678, 1234, "Sam Sepiol", 999.99),
+                    std::invalid_argument);
 }
 
 TEST_CASE("Example: Create a new account", "[ex-1]") {
