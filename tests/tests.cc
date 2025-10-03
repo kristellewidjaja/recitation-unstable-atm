@@ -26,12 +26,49 @@ bool CompareFiles(const std::string& p1, const std::string& p2) {
         (!f1.good() && f2.good()))
       return false;
   }
-  return true;
 }
+return true;
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // Test Cases
 /////////////////////////////////////////////////////////////////////////////////////////////
+
+TEST_CASE("Simple deposit", "[ex-2]") {
+  Atm atm;
+  atm.RegisterAccount(12345678, 1234, "Sam Sepiol", 300.30);
+  atm.DepositCash(12345678, 1234, 20);
+  auto accounts = atm.GetAccounts();
+  Account sam_account = accounts[{12345678, 1234}];
+  REQUIRE(sam_account.balance == 320.30);
+}
+
+TEST_CASE("Deposit edge cases", "[ex-2]") {
+  Atm atm;
+  atm.RegisterAccount(12345678, 1234, "Sam Sepiol", 300.30);
+  // check if no account exists, then make sure to throw an invalid_argument
+  // exception
+  REQUIRE_THROWS_AS(atm.DepositCash(87654321, 0987, 20), std::invalid_argument);
+
+  // throw an invalid_argument exception if the amount is negative
+  REQUIRE_THROWS_AS(atm.DepositCash(12345678, 1234, -20),
+                    std::invalid_argument);
+}
+
+TEST_CASE("Withdraw edge cases", "[ex-2]") {
+  Atm atm;
+  atm.RegisterAccount(12345678, 1234, "Sam Sepiol", 300.30);
+  // check if no account exists, then make sure to throw an invalid_argument
+  // exception
+  REQUIRE_THROWS_AS(atm.WithdrawCash(87654321, 0987, 20),
+                    std::invalid_argument);
+
+  // throw an invalid_argument exception if the amount is negative
+  REQUIRE_THROWS_AS(atm.WithdrawCash(12345678, 1234, -20),
+                    std::invalid_argument);
+
+  // throw an runtime_error exception if the amount is greater than the balance
+  REQUIRE_THROWS_AS(atm.WithdrawCash(12345678, 1234, 1000), std::runtime_error);
+}
 
 TEST_CASE("Example: Create a new account", "[ex-1]") {
   Atm atm;
@@ -61,9 +98,11 @@ TEST_CASE("Example: Simple widthdraw", "[ex-2]") {
   REQUIRE(sam_account.balance == 280.30);
 }
 
-TEST_CASE("Example: Print Prompt Ledger", "[ex-3]") {
+TEST_CASE("PrintLedger: exact prompt match with known transactions",
+          "[ledger]") {
   Atm atm;
   atm.RegisterAccount(12345678, 1234, "Sam Sepiol", 300.30);
+
   auto& transactions = atm.GetTransactions();
   transactions[{12345678, 1234}].push_back(
       "Withdrawal - Amount: $200.40, Updated Balance: $99.90");
@@ -71,6 +110,13 @@ TEST_CASE("Example: Print Prompt Ledger", "[ex-3]") {
       "Deposit - Amount: $40000.00, Updated Balance: $40099.90");
   transactions[{12345678, 1234}].push_back(
       "Deposit - Amount: $32000.00, Updated Balance: $72099.90");
+
   atm.PrintLedger("./prompt.txt", 12345678, 1234);
   REQUIRE(CompareFiles("./ex-1.txt", "./prompt.txt"));
+}
+
+TEST_CASE("PrintLedger: throws for non-existent account", "[ledger]") {
+  Atm atm;
+  REQUIRE_THROWS_AS(atm.PrintLedger("/tmp/should_not_exist.txt", 1, 1),
+                    std::invalid_argument);
 }
