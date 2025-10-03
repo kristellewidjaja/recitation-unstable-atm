@@ -26,6 +26,7 @@ bool CompareFiles(const std::string& p1, const std::string& p2) {
         (!f1.good() && f2.good()))
       return false;
   }
+  return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
