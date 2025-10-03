@@ -47,7 +47,7 @@ TEST_CASE("Deposit edge cases", "[ex-2]") {
   atm.RegisterAccount(12345678, 1234, "Sam Sepiol", 300.30);
   // check if no account exists, then make sure to throw an invalid_argument
   // exception
-  REQUIRE_THROWS_AS(atm.DepositCash(87654321, 0987, 20), std::invalid_argument);
+  REQUIRE_THROWS_AS(atm.DepositCash(87654321, 0887, 20), std::invalid_argument);
 
   // throw an invalid_argument exception if the amount is negative
   REQUIRE_THROWS_AS(atm.DepositCash(12345678, 1234, -20),
@@ -59,7 +59,7 @@ TEST_CASE("Withdraw edge cases", "[ex-2]") {
   atm.RegisterAccount(12345678, 1234, "Sam Sepiol", 300.30);
   // check if no account exists, then make sure to throw an invalid_argument
   // exception
-  REQUIRE_THROWS_AS(atm.WithdrawCash(87654321, 0987, 20),
+  REQUIRE_THROWS_AS(atm.WithdrawCash(87654321, 0887, 20),
                     std::invalid_argument);
 
   // throw an invalid_argument exception if the amount is negative
