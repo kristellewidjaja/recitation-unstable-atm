@@ -1,15 +1,12 @@
 Your test suite did not compile!
 
-tests/tests.cc:29:1: warning: non-void function does not return a value in all control paths [-Wreturn-type]
-   29 | }
-      | ^
-tests/tests.cc:49:48: error: invalid digit '9' in octal constant
-   49 |   REQUIRE_THROWS_AS(atm.DepositCash(87654321, 0987, 20), std::invalid_argument);
+tests/tests.cc:50:48: error: invalid digit '9' in octal constant
+   50 |   REQUIRE_THROWS_AS(atm.DepositCash(87654321, 0987, 20), std::invalid_argument);
       |                                                ^
-tests/tests.cc:61:49: error: invalid digit '9' in octal constant
-   61 |   REQUIRE_THROWS_AS(atm.WithdrawCash(87654321, 0987, 20),
+tests/tests.cc:62:49: error: invalid digit '9' in octal constant
+   62 |   REQUIRE_THROWS_AS(atm.WithdrawCash(87654321, 0987, 20),
       |                                                 ^
-1 warning and 2 errors generated.
+2 errors generated.
 
 
 score: 0/5
